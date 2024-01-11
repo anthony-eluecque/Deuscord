@@ -1,0 +1,78 @@
+#central_div{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -150px 0 0 -150px;
+}
+
+#central_div > form > input{
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+}
+#central_div > h1{
+  color: white;
+  text-align:center;
+}
+
+#central_div > form > button{
+  background-color: rgba(34, 160, 191, 1);
+  border-radius: 25px;
+  outline: none;
+  border: none;
+  align: center;
+  display: inline-block;
+}
+
+#central_div > form > p{
+    display: inline-block;
+}
+
+/*Computer version*/
+@media (min-width: 800px) {
+  #central_div{
+    width: 400px;
+    height: 400px;
+  }
+
+  #central_div > form > input{
+    width:100%;
+  }
+
+  #central_div > form > button{
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+
+/*Phones version*/
+@media (max-width: 800px){
+  #central_div > form > input, #central_div > form > button, #central_div > form > p{
+    width:50%;
+    margin-left: 60px;
+  }
+
+  #central_div > h1{
+    font-size:calc(12px + 3vw);/*1vw = 1%*/
+    margin-right: 60px;
+  }
+
+  #central_div > form > button{
+    padding: 8px;
+  }
+
+  #central_div > form > p{
+    font-size: calc(2px + 2vw);
+  }
+}
+
+input:focus{
+  background-color: rgba(0, 0, 0, 0.2)
+}
