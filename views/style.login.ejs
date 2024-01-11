@@ -22,7 +22,7 @@
 }
 
 #central_div > form > button{
-  background-color: rgba(34, 160, 191, 1);
+  background-color: rgba(34, 160, 191, 0.8);
   border-radius: 25px;
   outline: none;
   border: none;
@@ -30,7 +30,16 @@
   display: inline-block;
 }
 
-#central_div > form > p{
+.button{
+  background-color: rgba(53, 171, 75, 0.8);
+  border-radius: 25px;
+  outline: none;
+  border: none;
+  display: inline-block;
+  align: right;
+}
+
+#central_div > p{
     display: inline-block;
 }
 
@@ -49,12 +58,22 @@
     width: 100%;
     padding: 12px;
   }
+
+  .phone_only{
+    display: none;
+  }
+
+  .button{
+    padding: 6px;
+    width: 50%;
+    margin-left: 30px;
+  }
 }
 
 
 /*Phones version*/
-@media (max-width: 800px){
-  #central_div > form > input, #central_div > form > button, #central_div > form > p{
+@media (max-width: 799px){
+  #central_div > form > input, #central_div > form > button, #central_div >  p{
     width:50%;
     margin-left: 60px;
   }
@@ -68,11 +87,25 @@
     padding: 8px;
   }
 
-  #central_div > form > p{
+  #central_div > p{
     font-size: calc(2px + 2vw);
+  }
+
+  .computer_only{
+    display: none;
+  }
+
+  .button{
+    position: absolute;
+    right:2%;
+    bottom:2%;
+    width: 20%;
+
   }
 }
 
 input:focus{
   background-color: rgba(0, 0, 0, 0.2)
+}
+
 }
