@@ -1,4 +1,5 @@
-/*const a = require('./modules/test.js');*/
+const authentification = require('./modules/authentification.js');//Fonctions gérant le login/register
+const mysql_connection = require('./modules/mysql_connection.js');//Crée une connexion Mysql, stocke aussi les infos de connexion
 
 const express = require('express');//Import d'Express, simplifie la gestion du backend
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
@@ -7,16 +8,9 @@ const bodyParser = require('body-parser');// Import de body-parser : permet de r
 const mysql = require('mysql');//Import de MySql, permettra de faire des requêtes vers la BDD
 const bcrypt = require('bcrypt');//Import de bcrypt, permet de chiffrer les MDP
 
-
 var app = express();//Création de l'app Express
 var server = require("http").createServer(app);//Crée le serveur
-var connection = mysql.createConnection({//Informations de connexion à la BDD
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'deuscord'
-});
-const saltRounds = 15;//Nombre de fois qu'il faut hash le MDP ( bcrypt )
+var connection = mysql_connection.getConnexion();//Création d'une connexion
 
 app.use(morgan('combined'));//Démarre les logs
 app.use(bodyParser.urlencoded({extended: true}));
@@ -47,10 +41,11 @@ app.post('/login/post', function(req, res){
 });
 
 app.get('/register', function(req, res){
-  res.render('register.ejs')
+  res.render('register.ejs');
 });
-app.get('/register/post', function(req, res){
-  res.render('register.ejs')
+app.post('/register/post', function(req, res){
+  authentification.register(req, res, connection);
+  res.redirect('/login');
 });
 
 app.get('/style', function(req, res){
