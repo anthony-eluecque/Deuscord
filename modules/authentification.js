@@ -7,16 +7,15 @@ module.exports = {
     var pseudo = req.body.pseudo;
     var mail = req.body.email;
 
-    if(/^([a-zA-Z0-9_]{3,16})$/.test(pseudo) && /^([a-zA-Z0-9_.@]{5,240})$/.test(mail) && typeof(pseudo)=="string" && typeof(mail)=="string"){//Vérification que pseudo & mail sont corrects
+    if(/^([a-zA-Z0-9_]{1,16})$/.test(pseudo) && /^([a-zA-Z0-9_.@]{5,240})$/.test(mail) && typeof(pseudo)=="string" && typeof(mail)=="string"){//Vérification que pseudo & mail sont corrects
 
 
 
         //Les identifiants doivent être uniques
-      connection.query('SELECT COUNT(id) AS "nb" FROM user WHERE pseudo="'+pseudo+'" OR email="'+mail+'";', function(error, results, fields){
+      connection.query('SELECT COUNT(id) AS "nb" FROM user WHERE pseudo='+mysql.escape(pseudo)+' OR email='+mysql.escape(mail)+';', function(error, results, fields){
         if(error instanceof Error){
           console.log(error);
         }else{
-
           if(results[0].nb>0){
             //Déjà en BDD
             return;
@@ -25,17 +24,24 @@ module.exports = {
 
             bcrypt.hash(req.body.password, 12, function(err, hash) {//String, nombre de hashs, quoi faire ensuite
 
-              connection.query('INSERT INTO user (pseudo, email, password, creation_date) VALUES("'+pseudo+'", "'+mail+'", "'+hash+'", NOW());', function (error, results, fields) {//Error : Renvoit l'erreur s'il y en a une; result: Contient une liste de dictionnaires contenant les objets, fields : Données sur les tables ( useless )
+              connection.query('INSERT INTO user (pseudo, email, password, creation_date) VALUES('+mysql.escape(pseudo)+', '+mysql.escape(mail)+', "'+hash+'", NOW());', function (error, results, fields) {//Error : Renvoit l'erreur s'il y en a une; result: Contient une liste de dictionnaires contenant les objets, fields : Données sur les tables ( useless )
                 if (error instanceof Error){
                   console.log(error);//En cas d'erreur, l'erreur est log
 
                   //Erreur dans l'enregistrement
-                }else{
-                  //Tout s'est bien passé, return
-                  //Rediriger vers l'app
-                  req.session.pseudo = pseudo;
-                  req.session.save();
-                  res.redirect('/app');
+                }else{//Utilisateur inscrit, je récupère juste son ID dans la base de données pour l'associer à la session
+                  connection.query('SELECT id, pseudo FROM user WHERE pseudo='+mysql.escape(pseudo)+'', function(error, results, fields){
+                    if(error instanceof Error){
+                      console.log(error);
+                    }else{
+                      req.session.pseudo = results[0].pseudo;
+                      req.session.user_id = results[0].id;
+                      req.session.save();
+                      res.redirect('/app');
+                      //Tout s'est bien passé, return
+                      //Rediriger vers l'app
+                    }
+                  });
                 }
               });
             });
@@ -52,10 +58,9 @@ module.exports = {
   login: function(req, res, connection){
     var login = req.body.login;//Récupère le login
     var formPassword = req.body.password;
+    if(/^([a-zA-Z0-9_.@]{1,16})$/.test(login) && typeof(login)=="string"){
 
-    if(/^([a-zA-Z0-9_.@]{3,16})$/.test(login) && typeof(login)=="string"){
-
-      connection.query('SELECT pseudo, email, password FROM user WHERE pseudo="'+login+'" OR email="'+login+'";', function (error, results, fields) {//Error : Renvoit l'erreur s'il y en a une; result: Contient une liste de dictionnaires contenant les objets, fields : Données sur les tables ( useless )
+      connection.query('SELECT id, pseudo, email, password FROM user WHERE pseudo='+mysql.escape(login)+' OR email='+mysql.escape(login)+';', function (error, results, fields) {//Error : Renvoit l'erreur s'il y en a une; result: Contient une liste de dictionnaires contenant les objets, fields : Données sur les tables ( useless )
         if (error instanceof Error){
           console.log(error);//En cas d'erreur, l'erreur est log
 
@@ -68,8 +73,8 @@ module.exports = {
             bcrypt.compare(formPassword, results[0].password, function(err, result) {
               if(result){
                 //Connection acceptée
-                console.log("OK");
                 req.session.pseudo = results[0].pseudo;//Le pseudo en BDD est enregistré dans la session
+                req.session.user_id = results[0].id;
                 req.session.save();
                 res.redirect('/app');
               }else{

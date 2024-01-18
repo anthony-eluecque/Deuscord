@@ -16,24 +16,29 @@
 
 			<div class="chanels_div" id="chanels_list">
 
-				<div class="chanel">
+				<!-- Div copiée par le JS pour ajouter un serveur -->
+				<div class="chanel" style="display: none;">
 					<h5 class="chanel_name">Channel name</h5>
 					<img src="/img/keyboard.png" class="text_chanel_image">
-				</div>
-				<div class="chanel">
-					<h5 class="chanel_name">Channel name</h5>
-					<img src="/img/keyboard.png" class="text_chanel_image">
+					<input type="hidden" value="" class="chanel_description"></input>
+					<input type="hidden" value="" class="owner_id"></input>
+					<input type="hidden" value="" class="position"></input>
 				</div>
 
 			</div>
 
 			<div class="chanel_infos">
 
-				<form method="post" action="/app/chanels_admin/post" id="chanel_form">
-	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="16" id="chanel_name_input" class="stylized_input"></input>
-						<!--<br><label>Description du chanel :</label><textarea name="desc" form="chanel_form"></textarea>
-						<button type="submit">Valider</button>-->
-						
+				<form method="post" action="javascript:void(0);" id="chanel_form">
+	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="24" id="chanel_name_input" class="stylized_input"></input>
+						<input type="number" name="position" placeholder="Position du chanel" min="0" max="9999" id="chanel_position_input" class="stylized_input"></input>
+						<textarea name="desc" maxlength="512" form="chanel_form" id="chanel_desc_textarea">Description du chanel</textarea>
+						<div id="chanel_modify_submit_button_div">
+							<button type="submit" id="chanel_modify_submit_button">Valider</button>
+						</div>
+
+						<input type="hidden" name="new_chanel_created" id="new_chanel_created" value="true"><!-- Permet de dire au serveur si l'on crée un nouveau chanel, ou s'il s'agit d'une mise à jour -->
+
 				</form>
 
 			</div>
@@ -42,29 +47,51 @@
 			</div>
 
     </div>
+		<!--<script src="/js/cookies"></script>-->
+		<script src="/socket.io/socket.io.js"></script><!--J'importe le script néccésaire au fonctionnement de socket.io -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="/js/chanels_list"></script>
 		<script type="text/javascript">
 
+
+		var selected_chanel;
+		function clear_selected_if_exist(){
+			if(selected_chanel!=undefined){
+				$(selected_chanel).css('background-color', 'rgba(61, 61, 61)');
+			}
+		}
+
 			//Click sur un chanel
-			var selected_chanel;
-			$(".chanel").click(function(){
+			$("#chanels_list").on('click', '.chanel', function(){//Je séléctionne la div, puis j'applique l'événement sur les enfants avec la classe "chanel" -> Permet de gérer des éléments ajoutés dynamiquement
 
-				if(selected_chanel!=undefined){
-					$(selected_chanel).css('background-color', 'rgba(61, 61, 61)');
-				}
+				create_new_chanel = false;
+				document.getElementById("new_chanel_created").value = false;//Utilisé pour le formulaire quand un nouveau chanel est créé
 
+				clear_selected_if_exist();
 				selected_chanel = this;
 				$(this).css('background-color', '#787878');
 
 			});
 
+			$("#add_chanel").click(function(){
+				clear_selected_if_exist();
+				document.getElementById("new_chanel_created").value = true;
+				document.getElementById("chanel_name_input").value = "Nouveau chanel";
+			});
+
+			//Events Socket.io
+			$("#chanel_modify_submit_button").click(function(){
+				socket.emit("create_new_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, document.getElementById("new_chanel_created").value, (reponse) => {
+					console.log(reponse.status);
+					switch(reponse.status){//TODO : finir ici
+						case "OK":
+							break;
+						default:
+							break;
+					}
+				});
+			});
 
 		</script>
-
-
-
-
-
-
 	</body>
 </html>
