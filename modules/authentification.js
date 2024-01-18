@@ -33,12 +33,9 @@ module.exports = {
                 }else{
                   //Tout s'est bien passé, return
                   //Rediriger vers l'app
-<<<<<<< Updated upstream
-=======
                   req.session.pseudo = pseudo;
                   req.session.save();
                   res.redirect('/app');
->>>>>>> Stashed changes
                 }
               });
             });

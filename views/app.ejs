@@ -7,27 +7,27 @@
 	</head>
 	<body>
 
-    <div class="server_div grey">
+    <div class="server_div grey" id="server_div">
       <a href="#"><img src="/img/cogwheel.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/roue-dent%C3%A9e-engins-cog-options-145804/ -->
     </div>
 
-    <div class="chanel_list grey">
+    <div class="chanel_list grey" id="chanel_list">
       <a href="/app/chanels_admin"><img src="/img/cogwheel.png" id="chanel_settings_img" class="settings_img"></a>
       <ul class="servers_ul">
         <li>A</li>
       </ul>
     </div>
 
-    <div class="chanel_infos grey">
+    <div class="chanel_infos grey" id="chanel_infos">
     </div>
 
     <div class="central_div" align="right">
     </div>
 
-    <div class="online_list grey">
+    <div class="online_list grey" id="online_list">
     </div>
 
-    <div class="user_area grey">
+    <div class="user_area grey" id="user_area">
       <h3 id="username"><%= pseudo %></h3>
     </div>
 
@@ -39,18 +39,57 @@
       <img src="/img/animation_arrow.png" class="animation_arrow">
     </div>
 
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script type="text/javascript">
 
-			const div_chanels_panel = document.querySelector('#extend_chanels_panel');
+			const div_chanels_panel = document.querySelector('#extend_chanels_panel');//Carrés avec les flèches, un click dessus permet de lancer l'animation
 			const div_online_panel = document.querySelector('#extend_online_panel');
 
+			var chanels_extended = false;
+			var online_extended = false;
+
 			div_chanels_panel.addEventListener('click', event => {
-  			console.log("Ok");
-				//TODO : Changer la classe de la div pour faire une animation qui déplie / replie ( Bool qui détermine état replié / déplié )
+
+				if(online_extended){//Si le panel de droite est ouvert, je le referme
+					$('#online_list').animate({"left":"100%"}, 2000);
+					$('#extend_online_panel').animate({"left":"90%", "right":"0%"}, 2000);
+					online_extended = false;
+				}
+
+				if(chanels_extended){//Fermeture du panel de gauche
+					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);
+					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
+					$('#chanel_infos').animate({"bottom":"90%"}, 2000);
+					chanels_extended = false;
+				}else{//Ouverture du panel de gauche
+					$('#server_div, #chanel_list, #user_area').animate({"right":"20%"}, 2000);
+					$('#extend_chanels_panel').animate({"right":"10%", "left":"80%"}, 2000);
+					$('#chanel_infos').animate({"bottom":"100%"}, 2000);
+					chanels_extended = true;
+				}
+
 			});
 
 			div_online_panel.addEventListener('click', event => {
-  			console.log("Ok");
+
+  			if(chanels_extended){//Si le panel de gauche est ouvert, je le referme
+					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);
+					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
+					chanels_extended = false;
+				}
+
+				if(online_extended){//Fermeture du panel de droite
+					$('#online_list').animate({"left":"100%"}, 2000);
+					$('#extend_online_panel').animate({"left":"90%", "right":"0%"}, 2000);
+					$('#chanel_infos').animate({"bottom":"90%"}, 2000);
+					online_extended = false;
+				}else{//Ouverture du panel de droite
+					$('#online_list').animate({"left":"20%"}, 2000);
+					$('#extend_online_panel').animate({"left":"10%", "right":"80%"}, 2000);
+					$('#chanel_infos').animate({"bottom":"100%"}, 2000);
+					online_extended = true;
+				}
+
 			});
 
 		</script>
