@@ -25,7 +25,7 @@ redisClient.on('error', (err) => {
 app.use(session({
     secret: 'SECRET_A_CHANGER',
     //J'indique à express-session de stocker les sessions en cours dans Redis
-    store: new redisStore({ host: 'localhost', port: 6379, client: redisClient, ttl :  86000}),
+    store: new redisStore({ host: '127.0.0.1', port: 6379, client: redisClient, ttl :  86000}),
     saveUninitialized: true,
     resave: false
 }));
@@ -48,11 +48,7 @@ app.use(function(req, res, next){
 
 
 
-<<<<<<< Updated upstream
-app.get('/', function(req, res){//Je crée une "route", et j'y renvoit le fichier views/hello.ejs
-=======
 app.get('/', function(req, res){
->>>>>>> Stashed changes
   res.render('login.ejs');
 });
 
@@ -61,11 +57,6 @@ app.get('/login', function(req, res){
 });
 app.post('/login/post', function(req, res){
   authentification.login(req, res, connection);
-  res.redirect('/login');
-});
-
-app.get('/logout', function(req, res){
-  req.session.destroy();
   res.redirect('/login');
 });
 
