@@ -48,7 +48,11 @@ app.use(function(req, res, next){
 
 
 
+<<<<<<< Updated upstream
 app.get('/', function(req, res){//Je crée une "route", et j'y renvoit le fichier views/hello.ejs
+=======
+app.get('/', function(req, res){
+>>>>>>> Stashed changes
   res.render('login.ejs');
 });
 
@@ -56,8 +60,12 @@ app.get('/login', function(req, res){
   res.render('login.ejs');
 });
 app.post('/login/post', function(req, res){
-  var a = req.body.login;//Récupère le login
-  console.log(a);//Et l'affiche dans la console
+  authentification.login(req, res, connection);
+  res.redirect('/login');
+});
+
+app.get('/logout', function(req, res){
+  req.session.destroy();
   res.redirect('/login');
 });
 
