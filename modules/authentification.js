@@ -30,7 +30,7 @@ module.exports = {
 
                   //Erreur dans l'enregistrement
                 }else{//Utilisateur inscrit, je récupère juste son ID dans la base de données pour l'associer à la session
-                  connection.query('SELECT id, pseudo FROM user WHERE pseudo='+mysql.escape(pseudo)+'', function(error, results, fields){
+                  connection.query('SELECT id, pseudo FROM user WHERE pseudo='+mysql.escape(pseudo)+';', function(error, results, fields){
                     if(error instanceof Error){
                       console.log(error);
                     }else{

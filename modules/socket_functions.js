@@ -16,6 +16,10 @@ module.exports = {
           if(error instanceof Error){
             //Erreur lors de a création du chanel
             console.log(error);
+            callback({
+              status: "erreur",
+              info: "Erreur BDD"
+            });
           }else{
             callback({
               status: "OK"
@@ -28,14 +32,15 @@ module.exports = {
       }
     }else{
       callback({
-        status: "Erreur : Nom du chanel incorrect !\n( [a-zA-Z0-9_ ] )"
+        status: "erreur",
+        info:  "Nom du chanel incorrect !\n( [a-zA-Z0-9_ ] )"
       });
     }
   },
 
   get_chanel_list: function(connection, socket, callback){
     //TODO : vérifier les perms
-    connection.query('SELECT id, name, subject, owner, position FROM chanel ORDER BY position;', function(error, results, fields){
+    connection.query('SELECT chanel.id, name, subject, owner, position, pseudo FROM chanel INNER JOIN user ON chanel.owner=user.id ORDER BY position;', function(error, results, fields){
       if(error instanceof Error){
         console.log(error);
         callback({

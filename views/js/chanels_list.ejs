@@ -1,19 +1,44 @@
-//Fonctions
+/*<div class="chanel" style="display: none;">
+  <h5 class="chanel_name">Channel name</h5>
+  <img src="/img/keyboard.png" class="text_chanel_image">
+  <input type="hidden" value="" class="chanel_description"></input>
+  <input type="hidden" value="" class="owner_id"></input>
+  <input type="hidden" value="" class="owner_name"></input>
+  <input type="hidden" value="" class="position"></input>
+</div>*/
+
+
+
+//Fonctions, néccéssite JQuery
 var chanel_div = document.getElementsByClassName("chanel")[0];
 
-function add_chanel_div(nom, id, description, owner, position){
+function add_chanel_div(nom, id, description, owner, position, pseudo){
   var nouveau_chanel = document.getElementById("chanels_list").appendChild(chanel_div.cloneNode(true));//true -> true|false -> copier les éléments "enfants"
   $(nouveau_chanel).css("display", "block");//La nouvelle div est affichée
   nouveau_chanel.setAttribute("id", "chanel_"+id);//Un ID est donné au nouveau chanel
   nouveau_chanel.children[0].innerHTML = nom;//Et le nom est définit ( <h3> est le premier enfant de la div )
   nouveau_chanel.children[2].value = description;
   nouveau_chanel.children[3].value = owner;
-  nouveau_chanel.children[4].value = position;
+  nouveau_chanel.children[4].value = pseudo;
+  nouveau_chanel.children[5].value = position;
 }
-//Socket.io
+
+function clear_chanel_list(){
+    $("#chanels_list > .chanel").remove();
+}
+
+//socket.io
 const socket = io();
-socket.emit("get_chanel_list", (reponse) =>{
-  for(var i=0; i<reponse.result.length; i++){
-    add_chanel_div(reponse.result[i].name, reponse.result[i].id, reponse.result[i].subject, reponse.result[i].owner, reponse.result[i].position);
-  }
-});
+
+function create_chanel_list(){
+  socket.emit("get_chanel_list", (reponse) =>{
+    for(var i=0; i<reponse.result.length; i++){
+      add_chanel_div(reponse.result[i].name, reponse.result[i].id, reponse.result[i].subject, reponse.result[i].owner, reponse.result[i].position, reponse.result[i].pseudo);
+    }
+  });
+}
+
+function regen_chanel_list(){
+  clear_chanel_list();
+  create_chanel_list();
+}

@@ -21,6 +21,7 @@
 				<img src="/img/keyboard.png" class="text_chanel_image">
 				<input type="hidden" value="" class="chanel_description"></input><!-- Les trois inputs cachés stockent la description, le créateur du chanel et la position du chanel dans la liste -->
 				<input type="hidden" value="" class="owner_id"></input>
+				<input type="hidden" value="" class="owner_name"></input>
 				<input type="hidden" value="" class="position"></input>
 			</div>
 
@@ -49,8 +50,10 @@
 
 		<script src="/socket.io/socket.io.js"></script><!--J'importe le script néccésaire au fonctionnement de socket.io -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="/js/chanels_list"></script>
+		<script src="/js/chanels_list"></script><!-- Permet de gérer la liste des chanels, socket y est définit -->
 		<script type="text/javascript">
+
+			create_chanel_list();//Affiche la liste des chanels depuis la BDD
 
 			const div_chanels_panel = document.querySelector('#extend_chanels_panel');//Carrés avec les flèches, un click dessus permet de lancer l'animation
 			const div_online_panel = document.querySelector('#extend_online_panel');

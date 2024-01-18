@@ -22,12 +22,15 @@
 					<img src="/img/keyboard.png" class="text_chanel_image">
 					<input type="hidden" value="" class="chanel_description"></input>
 					<input type="hidden" value="" class="owner_id"></input>
+					<input type="hidden" value="" class="owner_name"></input>
 					<input type="hidden" value="" class="position"></input>
 				</div>
 
 			</div>
 
 			<div class="chanel_infos">
+				<h3 id="chanel_owner_h3"></h3>
+				<img src="/img/delete.png" id="delete_chanel">
 
 				<form method="post" action="javascript:void(0);" id="chanel_form">
 	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="24" id="chanel_name_input" class="stylized_input"></input>
@@ -50,9 +53,10 @@
 		<!--<script src="/js/cookies"></script>-->
 		<script src="/socket.io/socket.io.js"></script><!--J'importe le script néccésaire au fonctionnement de socket.io -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="/js/chanels_list"></script>
+		<script src="/js/chanels_list"></script><!-- Permet de gérer la liste des chanels, socket y est définit -->
 		<script type="text/javascript">
 
+		create_chanel_list();//Affiche la liste des chanels depuis la BDD
 
 		var selected_chanel;
 		function clear_selected_if_exist(){
@@ -68,8 +72,13 @@
 				document.getElementById("new_chanel_created").value = false;//Utilisé pour le formulaire quand un nouveau chanel est créé
 
 				clear_selected_if_exist();
+
 				selected_chanel = this;
 				$(this).css('background-color', '#787878');
+				$("#chanel_name_input").val($(this).children('.chanel_name').text());
+				$("#chanel_position_input").val($(this).children('.position').val());
+				$("#chanel_desc_textarea").val($(this).children('.chanel_description').val());
+				$("#chanel_owner_h3").text("Propriétaire : "+$(this).children('.owner_name').val());
 
 			});
 
@@ -77,15 +86,24 @@
 				clear_selected_if_exist();
 				document.getElementById("new_chanel_created").value = true;
 				document.getElementById("chanel_name_input").value = "Nouveau chanel";
+				$("#chanel_desc_textarea").val("");
+				$("#chanel_owner_h3").text("Nouveau chanel");
 			});
 
 			//Events Socket.io
 			$("#chanel_modify_submit_button").click(function(){
-				socket.emit("create_new_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, document.getElementById("new_chanel_created").value, (reponse) => {
-					console.log(reponse.status);
-					switch(reponse.status){//TODO : finir ici
+				socket.emit("manage_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, document.getElementById("new_chanel_created").value, (reponse) => {
+					console.log("Status de la requête : "+reponse.status);
+					switch(reponse.status){
 						case "OK":
+							//Rechargement de la liste des chanels
+							regen_chanel_list();
 							break;
+
+						case "erreur":
+							alert(reponse.info);
+							break;
+
 						default:
 							break;
 					}

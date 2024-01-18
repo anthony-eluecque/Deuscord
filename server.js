@@ -1,7 +1,7 @@
 const authentification = require('./modules/authentification.js');//Fonctions gérant le login/register
 const mysql_connection = require('./modules/mysql_connection.js');//Crée une connexion Mysql, stocke aussi les infos de connexion
 const images = require('./modules/images.js');//Fonction gérant le /img/...
-const socket_functions = require('./modules/socket_functions.js');//Gestion de requêtes post
+const socket_functions = require('./modules/socket_functions.js');//Fonctions de socket.io
 
 const express = require('express');//Import d'Express, simplifie la gestion du backend
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
@@ -55,7 +55,7 @@ app.use(sessionMiddleware);
 io.sockets.on('connection', function(socket){
   console.log("Un client s'est connecté !");
 
-  socket.on("create_new_chanel", (name, description, position, new_chanel_created, callback) => {
+  socket.on("manage_chanel", (name, description, position, new_chanel_created, callback) => {
     socket_functions.manage_chanel(name, description, position, new_chanel_created, connection, socket, callback);//Nom du chanel, description, nouveau ou non, connexion Mysql, socket si besoin de renvoyer un message, retour
   });
 
