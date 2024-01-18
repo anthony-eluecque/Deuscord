@@ -70,7 +70,7 @@ app.get('/register', function(req, res){
 });
 app.post('/register/post', function(req, res){
   authentification.register(req, res, connection);
-  res.redirect('/login');
+  //res.redirect('/login');
 });
 
 app.get('/style', function(req, res){
@@ -86,4 +86,4 @@ app.get('/style/login', function(req, res){
 
 
 console.log("Serveur démarré !");
-app.listen(8080, '0.0.0.0');//Le serveur démarre sur le port 80 ( HTTP par défaut en 80, HTTPS en 443), et écoute les connexions de toutes les IPs
+app.listen(8080, '0.0.0.0');//Le serveur démarre sur le port 8080 ( HTTP par défaut en 80, HTTPS en 443), et écoute les connexions de toutes les IPs

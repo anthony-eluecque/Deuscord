@@ -32,6 +32,7 @@ module.exports = {
                   //Erreur dans l'enregistrement
                 }else{
                   //Tout s'est bien passé, return
+                  //Rediriger vers l'app
                 }
               });
             });
@@ -40,7 +41,8 @@ module.exports = {
       });
 
     }else{
-      //Pseudo/mail non conformes
+      //Caractères interdits
+      res.redirect('/register?error=forbiden_sign');
     }
   },
 
@@ -60,7 +62,6 @@ module.exports = {
           //Requête OK
           if(results.length==1){
 
-            console.log(results[0].password);
             bcrypt.compare(formPassword, results[0].password, function(err, result) {
               if(result){
                 //Connection acceptée

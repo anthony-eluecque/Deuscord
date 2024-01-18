@@ -43,7 +43,23 @@
     display: inline-block;
 }
 
-/*Computer version*/
+.error_div{
+  position: absolute;
+  top: -8%;
+  display: none;/*Caché par défaut, propriété modifiée par le JS quand néccéssaire*/
+  background-color: red;
+  color: white;
+  border-radius: 25px;
+  height: 6%;
+}
+
+.error_div > p{
+  position: relative;
+  left: 50%
+  transform: translate(-50%, 0);
+}
+
+/*Ordinateurs*/
 @media (min-width: 800px) {
   #central_div{
     width: 400px;
@@ -68,10 +84,18 @@
     width: 50%;
     margin-left: 30px;
   }
+
+  .error_div{
+    width: 100%;
+  }
+
+  .error_div > p{
+    top: -13px;
+  }
 }
 
 
-/*Phones version*/
+/*Telephones*/
 @media (max-width: 799px){
   #central_div > form > input, #central_div > form > button, #central_div >  p{
     width:50%;
@@ -102,10 +126,19 @@
     width: 20%;
 
   }
+
+  .error_div{
+    width: 50%;
+    margin-left: 60px;
+  }
 }
 
 input:focus{
   background-color: rgba(0, 0, 0, 0.2)
+}
+
+.error_div > p{
+  top: -15px;
 }
 
 }
