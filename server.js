@@ -7,10 +7,28 @@ const ejs = require('ejs');//Import d'ejs : permet de rendre les .ejs, les <% %>
 const bodyParser = require('body-parser');// Import de body-parser : permet de récupérer les infos des formulaires sur le site
 const mysql = require('mysql');//Import de MySql, permettra de faire des requêtes vers la BDD
 const bcrypt = require('bcrypt');//Import de bcrypt, permet de chiffrer les MDP
+const redis = require("redis");//Redis
+const session = require('express-session');//Gestion des sessions avec Express
+const redisStore = require('connect-redis')(session);//Stockage des données dans Redis
 
 var app = express();//Création de l'app Express
 var server = require("http").createServer(app);//Crée le serveur
 var connection = mysql_connection.getConnexion();//Création d'une connexion
+
+//redis
+var redisClient  = redis.createClient();
+
+redisClient.on('error', (err) => {
+  console.log('Redis error : ', err);
+});
+
+app.use(session({
+    secret: 'SECRET_A_CHANGER',
+    //J'indique à express-session de stocker les sessions en cours dans Redis
+    store: new redisStore({ host: 'localhost', port: 6379, client: redisClient, ttl :  86000}),
+    saveUninitialized: true,
+    resave: false
+}));
 
 app.use(morgan('combined'));//Démarre les logs
 app.use(bodyParser.urlencoded({extended: true}));
@@ -27,6 +45,9 @@ app.use(function(req, res, next){
     next();
 });
 
+
+
+
 app.get('/', function(req, res){//Je crée une "route", et j'y renvoit le fichier views/hello.ejs
   res.render('login.ejs');
 });
@@ -40,6 +61,11 @@ app.post('/login/post', function(req, res){
   res.redirect('/login');
 });
 
+app.get('/logout', function(req, res){
+  req.session.destroy();
+  res.redirect('/login');
+});
+
 app.get('/register', function(req, res){
   res.render('register.ejs');
 });
@@ -49,15 +75,15 @@ app.post('/register/post', function(req, res){
 });
 
 app.get('/style', function(req, res){
-  res.render('style.ejs');
+  res.render('./style/style.ejs');
 });
 app.get('/style/login', function(req, res){
-  res.render('style.login.ejs');
+  res.render('./style/style.login.ejs');
 });
 
-app.get('/:url', function(req, res){//Même chose, mais la "route" est dynamique, et envoyée dans une variable
-  res.render('hello.ejs',{url: req.params.url});
-});
+
+
+
 
 
 console.log("Serveur démarré !");

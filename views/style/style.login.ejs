@@ -1,0 +1,111 @@
+#central_div{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: -150px 0 0 -150px;
+}
+
+#central_div > form > input{
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+}
+#central_div > h1{
+  color: white;
+  text-align:center;
+}
+
+#central_div > form > button{
+  background-color: rgba(34, 160, 191, 0.8);
+  border-radius: 25px;
+  outline: none;
+  border: none;
+  align: center;
+  display: inline-block;
+}
+
+.button{
+  background-color: rgba(53, 171, 75, 0.8);
+  border-radius: 25px;
+  outline: none;
+  border: none;
+  display: inline-block;
+  align: right;
+}
+
+#central_div > p{
+    display: inline-block;
+}
+
+/*Computer version*/
+@media (min-width: 800px) {
+  #central_div{
+    width: 400px;
+    height: 400px;
+  }
+
+  #central_div > form > input{
+    width:100%;
+  }
+
+  #central_div > form > button{
+    width: 100%;
+    padding: 12px;
+  }
+
+  .phone_only{
+    display: none;
+  }
+
+  .button{
+    padding: 6px;
+    width: 50%;
+    margin-left: 30px;
+  }
+}
+
+
+/*Phones version*/
+@media (max-width: 799px){
+  #central_div > form > input, #central_div > form > button, #central_div >  p{
+    width:50%;
+    margin-left: 60px;
+  }
+
+  #central_div > h1{
+    font-size:calc(12px + 3vw);/*1vw = 1%*/
+    margin-right: 60px;
+  }
+
+  #central_div > form > button{
+    padding: 8px;
+  }
+
+  #central_div > p{
+    font-size: calc(2px + 2vw);
+  }
+
+  .computer_only{
+    display: none;
+  }
+
+  .button{
+    position: absolute;
+    right:2%;
+    bottom:2%;
+    width: 20%;
+
+  }
+}
+
+input:focus{
+  background-color: rgba(0, 0, 0, 0.2)
+}
+
+}
