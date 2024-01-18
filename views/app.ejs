@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>MODIFIER</title>
+		<link rel="stylesheet" type="text/css" href="/style">
+    <link rel="stylesheet" type="text/css" href="/style/app">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	</head>
+	<body>
+
+    <div class="server_div grey">
+      <a href="#"><img src="/img/cogwheel.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/roue-dent%C3%A9e-engins-cog-options-145804/ -->
+    </div>
+
+    <div class="chanel_list grey">
+      <a href="/app/chanels_admin"><img src="/img/cogwheel.png" id="chanel_settings_img" class="settings_img"></a>
+      <ul class="servers_ul">
+        <li>A</li>
+      </ul>
+    </div>
+
+    <div class="chanel_infos grey">
+    </div>
+
+    <div class="central_div" align="right">
+    </div>
+
+    <div class="online_list grey">
+    </div>
+
+    <div class="user_area grey">
+      <h3 id="username"><%= pseudo %></h3>
+    </div>
+
+    <div class="extend_chanels_panel" id="extend_chanels_panel">
+      <img src="/img/animation_arrow.png" class="animation_arrow"><!-- https://pixabay.com/fr/illustrations/fl%C3%A8che-r%C3%A9pertoire-panneaux-2085195/ -->
+    </div>
+
+    <div class="extend_online_panel" id="extend_online_panel">
+      <img src="/img/animation_arrow.png" class="animation_arrow">
+    </div>
+
+		<script type="text/javascript">
+
+			const div_chanels_panel = document.querySelector('#extend_chanels_panel');
+			const div_online_panel = document.querySelector('#extend_online_panel');
+
+			div_chanels_panel.addEventListener('click', event => {
+  			console.log("Ok");
+				//TODO : Changer la classe de la div pour faire une animation qui déplie / replie ( Bool qui détermine état replié / déplié )
+			});
+
+			div_online_panel.addEventListener('click', event => {
+  			console.log("Ok");
+			});
+
+		</script>
+
+	</body>
+</html>

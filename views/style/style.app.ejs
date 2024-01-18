@@ -1,0 +1,217 @@
+/*A OPTIMISER !*/
+
+body{
+  height: 100%;
+  width: 100%;
+}
+
+.grey{
+  background-color: rgba(61, 61, 61, 0.5);
+}
+
+/*Ordinateurs*/
+@media (min-width: 800px) {
+  .server_div{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    right: 85%;
+    bottom: 85%;
+  }
+
+  .chanel_list{
+    position: absolute;
+    top: 15%;
+    bottom: 5%;
+    left: 0%;
+    right: 85%;
+    overflow: hidden auto;
+    border-top: solid;
+    border-bottom: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-bottom-color: #242424;
+    border-top-color: #242424;
+  }
+  .servers_ul{
+    list-style-type: none;
+  }
+
+  .central_div{
+    right: 10%;
+    position: absolute;
+    left:15%;
+    top: 5%;
+    bottom: 0%;
+  }
+
+  .chanel_infos{
+    right: 10%;
+    position: absolute;
+    left:15%;
+    top: 0%;
+    bottom: 95%;
+    border-right: solid;
+    border-left: solid;
+    border-right-width: 1px;
+    border-left-width: 1px;
+    border-left-color: #242424;
+    border-right-color: #242424;
+  }
+
+  .online_list{
+    position: absolute;
+    top: 0%;
+    right:0%;
+    left: 90%;
+    bottom: 0%;
+  }
+
+  .user_area{
+    position: absolute;
+    bottom: 0%;
+    top: 95%;
+    left: 0%;
+    right: 85%;
+  }
+
+  h3{
+    font-size:16px;
+  }
+
+  #username{
+    position: absolute;
+    left: 0%;
+    color: white;
+  }
+
+  .settings_img{
+    width: 15%;
+    position: absolute;
+    right: 0%;
+    top: 0%;
+  }
+
+  .extend_chanels_panel{
+    display: none;
+  }
+
+  .extend_online_panel{
+    display: none;
+  }
+
+  .animation_arrow{
+    display: none;
+  }
+}
+
+/*Telephones*/
+@media (max-width: 799px){
+  .server_div{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    right: 100%;/*Déplier*/
+    bottom: 85%;
+  }
+
+  .chanel_list{
+    position: absolute;
+    top: 15%;
+    bottom: 5%;
+    left: 0%;
+    right: 100%;/*Déplier*/
+    overflow: hidden auto;
+    border-top: solid;
+    border-bottom: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-bottom-color: #242424;
+    border-top-color: #242424;
+  }
+  .servers_ul{
+    list-style-type: none;
+  }
+
+  .central_div{
+    right: 10%;
+    position: absolute;
+    left:15%;
+    top: 5%;
+    bottom: 0%;
+  }
+
+  .chanel_infos{/*Modifié*/
+    right: 0%;/*Déplié*/
+    position: absolute;
+    left:0%;/*Déplié*/
+    top: 0%;
+    bottom: 90%;/*Déplié*/
+    border-bottom: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: #242424;
+  }
+
+  .online_list{
+    position: absolute;
+    top: 0%;
+    right:0%;
+    left: 100%;/*Déplier*/
+    bottom: 0%;
+  }
+
+  .user_area{
+    position: absolute;
+    bottom: 0%;
+    top: 95%;
+    left: 0%;
+    right: 100%;/*Déplier*/
+  }
+
+  h3{
+    font-size:16px;
+  }
+
+  #username{
+    position: absolute;
+    left: 0%;
+    color: white;
+    font-size: calc(6px + 1vw);
+    display: none;/*Montrer*/
+  }
+
+  .settings_img{
+    width: 15%;
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    display: none;/*Montrer*/
+  }
+
+  .extend_chanels_panel{
+    position: absolute;
+    top: 45%;
+    bottom: 45%;
+    left: 0%;
+    right: 90%;
+    background-color: rgba(61, 61, 61, 0.5);
+    border-style: dotted;
+  }
+
+  .extend_online_panel{
+    position: absolute;
+    top: 45%;
+    bottom: 45%;
+    left: 90%;
+    right: 0%;
+    background-color: rgba(61, 61, 61, 0.5);
+    border-style: dotted;
+  }
+
+  .animation_arrow{
+      position: absolute;
+      top: 25%;
+      left: 0%;
+      width: 100%;
+  }
+}
