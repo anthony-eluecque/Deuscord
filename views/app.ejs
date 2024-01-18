@@ -8,14 +8,26 @@
 	<body>
 
     <div class="server_div grey" id="server_div">
-      <a href="#"><img src="/img/cogwheel.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/roue-dent%C3%A9e-engins-cog-options-145804/ -->
+      <a href="#"><img src="/img/gear.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/gear-param%C3%A8tres-options-ic%C3%B4ne-1077550/ -->
     </div>
 
     <div class="chanel_list grey" id="chanel_list">
-      <a href="/app/chanels_admin"><img src="/img/cogwheel.png" id="chanel_settings_img" class="settings_img"></a>
-      <ul class="servers_ul">
-        <li>A</li>
-      </ul>
+      <a href="/app/chanels_admin"><img src="/img/gear.png" id="chanel_settings_img" class="settings_img"></a>
+
+			<!-- Liste des chanels -->
+
+			<div class="chanel">
+				<h5 class="chanel_name">Channel 1</h5>
+				<img src="/img/keyboard.png" class="text_chanel_image">
+			</div>
+
+			<div class="chanel">
+				<h5 class="chanel_name">Channel 2</h5>
+				<img src="/img/keyboard.png" class="text_chanel_image">
+			</div>
+
+
+
     </div>
 
     <div class="chanel_infos grey" id="chanel_infos">
@@ -73,7 +85,7 @@
 			div_online_panel.addEventListener('click', event => {
 
   			if(chanels_extended){//Si le panel de gauche est ouvert, je le referme
-					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);
+					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);//animate(Dico des propriétés CSS à changer, durée en ms)
 					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
 					chanels_extended = false;
 				}

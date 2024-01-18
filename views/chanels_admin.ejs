@@ -7,6 +7,64 @@
 	</head>
 	<body>
     <div id="central_div">
+
+			<div class="div_left_pane">
+				<a href="/app"><img src="/img/close.png" id="close"></a><!-- https://pixabay.com/fr/vectors/proches-abandonn%C3%A9-x-ic%C3%B4ne-1540630/ -->
+				<h3 align="center">Gestion des chanels</h3>
+				<a href="#"><img src="/img/add.png" id="add_chanel"></a> <!-- https://pixabay.com/fr/vectors/plus-ajouter-croix-ajout-5840717/ -->
+			</div>
+
+			<div class="chanels_div" id="chanels_list">
+
+				<div class="chanel">
+					<h5 class="chanel_name">Channel name</h5>
+					<img src="/img/keyboard.png" class="text_chanel_image">
+				</div>
+				<div class="chanel">
+					<h5 class="chanel_name">Channel name</h5>
+					<img src="/img/keyboard.png" class="text_chanel_image">
+				</div>
+
+			</div>
+
+			<div class="chanel_infos">
+
+				<form method="post" action="/app/chanels_admin/post" id="chanel_form">
+	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="16" id="chanel_name_input" class="stylized_input"></input>
+						<!--<br><label>Description du chanel :</label><textarea name="desc" form="chanel_form"></textarea>
+						<button type="submit">Valider</button>-->
+						
+				</form>
+
+			</div>
+
+			<div class="chanel_perms">
+			</div>
+
     </div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script type="text/javascript">
+
+			//Click sur un chanel
+			var selected_chanel;
+			$(".chanel").click(function(){
+
+				if(selected_chanel!=undefined){
+					$(selected_chanel).css('background-color', 'rgba(61, 61, 61)');
+				}
+
+				selected_chanel = this;
+				$(this).css('background-color', '#787878');
+
+			});
+
+
+		</script>
+
+
+
+
+
+
 	</body>
 </html>

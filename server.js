@@ -1,5 +1,7 @@
 const authentification = require('./modules/authentification.js');//Fonctions gérant le login/register
 const mysql_connection = require('./modules/mysql_connection.js');//Crée une connexion Mysql, stocke aussi les infos de connexion
+const images = require('./modules/images.js');//Fonction gérant le /img/...
+const post_functions = require('./modules/post_functions.js');//Gestion de requêtes post
 
 const express = require('express');//Import d'Express, simplifie la gestion du backend
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
@@ -16,17 +18,6 @@ var path = require('path');//Gestion des chemins d'accès
 var app = express();//Création de l'app Express
 var server = require("http").createServer(app);//Crée le serveur
 var connection = mysql_connection.getConnexion();//Création d'une connexion
-
-var retours_possibles = {
-    html: 'text/html',
-    txt: 'text/plain',
-    css: 'text/css',
-    gif: 'image/gif',
-    jpg: 'image/jpeg',
-    png: 'image/png',
-    svg: 'image/svg+xml',
-    js: 'application/javascript'
-};
 
 //redis
 var redisClient  = redis.createClient();
@@ -69,7 +60,7 @@ app.get('/login', function(req, res){
   res.render('login.ejs');
 });
 app.post('/login/post', function(req, res){
-  authentification.login(req, res, connection);
+  authentification.login(req, res, connection);//Exécution de la fonction login définie dans le module authentification
 });
 
 app.get('/logout', function(req, res){
@@ -103,6 +94,14 @@ app.get('/app/chanels_admin', function(req, res){
   }
 });
 
+app.post('/app/chanels_admin/post', function(req, res){
+  if(1==1 && req.session.pseudo!=undefined){//TODO : Vérifier niveau de permission
+    post_functions.chanels_admin_post(req, res);
+  }else{
+    res.status(404).end('Not found');
+  }
+});
+
 
 //Style
 app.get('/style', function(req, res){
@@ -120,25 +119,7 @@ app.get('/style/app/chanels_admin', function(req, res){
 
 //Obtention d'images
 app.get('/img/:img', function(req, res){
-
-  if(/^([a-zA-Z0-9._]{0,99})$/.test(req.params.img)){//Vérification pour éviter une possible faille ici
-
-      var type = retours_possibles[path.extname('views/img/'+req.params.img).slice(1)] || 'text/plain';//En fonction de l'extension du fichier, je choisis le type du retour
-      var s = fs.createReadStream('views/img/'+req.params.img);//Puis je crée un stream pour envoyer ce fichier
-
-      s.on('open', function () {//Quand l'événement ouverture est détécté, le fichier est envoyé au client
-        res.set('Content-Type', type);
-        s.pipe(res);
-      });
-
-      s.on('error', function () {//S'il y a une erreur, une erreur 404 est renvoyée
-        res.set('Content-Type', 'text/plain');
-        res.status(404).end('Not found');
-      });
-
-  }else{
-    res.status(404).end('Not found');//Argument :img incorrect
-  }
+  images.getImage(req, res);
 });
 
 

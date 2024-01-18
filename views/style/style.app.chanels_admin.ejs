@@ -1,3 +1,12 @@
+textarea {
+  resize: none;
+}
+
+h3{
+  color: white;
+  font-size: calc(8px + 0.5vw);
+  }
+
 #central_div{
   position: absolute;
   top: 2%;
@@ -6,4 +15,106 @@
   bottom: 2%;
   border-radius: 30px;
   background-color: rgba(61, 61, 61, 0.5);
+}
+
+#close{
+  position: absolute;
+  top: 0.5%;
+  left: 0.5%;
+  width: calc(8px + 1vw);
+  z-index: 1;
+}
+
+.div_left_pane{
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  bottom: 95%;
+  right: 80%;
+  border-style: dotted;
+}
+
+.chanel_infos{
+  position: absolute;
+  left: 20%;
+  top: 0%;
+  bottom: 75%;
+  right: 0%;
+  border-style: dotted;
+}
+
+.chanel_perms{
+  position: absolute;
+  left: 20%;
+  top: 25%;
+  bottom: 0%;
+  right: 0%;
+  border-style: dotted;
+}
+
+#add_chanel{
+  position: absolute;
+  top: 0.5%;
+  right: 0.5%;
+  width: calc(8px + 1vw);
+  z-index: 1;
+}
+
+.chanels_div{
+  position: absolute;
+  bottom: 0%;
+  top: 5%;
+  left: 0%;
+  right: 80%;
+  border-style: dotted;
+  overflow: hidden auto;
+}
+
+
+/*Affichage des chanels*/
+.chanel{
+  position: relative;
+  height: 5%;
+  width: 100%;
+  border-radius: 30px;
+  background-color: rgba(61, 61, 61);
+  margin-top: 1%;
+}
+
+.chanel_name{
+  margin: 0;
+  margin-left: 18px;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%); /*https://www.w3schools.com/howto/howto_css_center-vertical.asp*/
+  transform: translateY(-50%);
+  color: white;
+}
+
+.text_chanel_image{
+  position: absolute;
+  top:10%;
+  right: 5%;
+  width: 10%;
+}
+
+.stylized_input{
+  display: inline-block;
+  background-color: rgba(0, 0, 0, 0.4);
+  margin-bottom: 10px;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: white;
+  border-radius: 25px;
+  text-align: center;
+}
+
+#chanel_name_input{
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  top:10%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
