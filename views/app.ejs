@@ -70,12 +70,12 @@
 				}
 
 				if(chanels_extended){//Fermeture du panel de gauche
-					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);
+					$('#server_div, #chanels_list, #user_area').animate({"right":"100%"}, 2000);
 					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
 					$('#chanel_infos').animate({"bottom":"90%"}, 2000);
 					chanels_extended = false;
 				}else{//Ouverture du panel de gauche
-					$('#server_div, #chanel_list, #user_area').animate({"right":"20%"}, 2000);
+					$('#server_div, #chanels_list, #user_area').animate({"right":"20%"}, 2000);
 					$('#extend_chanels_panel').animate({"right":"10%", "left":"80%"}, 2000);
 					$('#chanel_infos').animate({"bottom":"100%"}, 2000);
 					chanels_extended = true;
@@ -85,7 +85,7 @@
 			div_online_panel.addEventListener('click', event => {
 
   			if(chanels_extended){//Si le panel de gauche est ouvert, je le referme
-					$('#server_div, #chanel_list, #user_area').animate({"right":"100%"}, 2000);//animate(Dico des propriétés CSS à changer, durée en ms)
+					$('#server_div, #chanels_list, #user_area').animate({"right":"100%"}, 2000);//animate(Dico des propriétés CSS à changer, durée en ms)
 					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
 					chanels_extended = false;
 				}

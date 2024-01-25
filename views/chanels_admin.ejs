@@ -30,9 +30,9 @@
 
 			<div class="chanel_infos">
 				<h3 id="chanel_owner_h3"></h3>
-				<img src="/img/delete.png" id="delete_chanel">
+				<img src="/img/delete.png" id="delete_chanel" style="display: none;">
 
-				<form method="post" action="javascript:void(0);" id="chanel_form">
+				<form method="post" action="javascript:void(0);" id="chanel_form" style="display: none;">
 	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="24" id="chanel_name_input" class="stylized_input"></input>
 						<input type="number" name="position" placeholder="Position du chanel" min="0" max="9999" id="chanel_position_input" class="stylized_input"></input>
 						<textarea name="desc" maxlength="512" form="chanel_form" id="chanel_desc_textarea">Description du chanel</textarea>
@@ -70,20 +70,26 @@
 
 				create_new_chanel = false;
 				document.getElementById("new_chanel_created").value = false;//Utilisé pour le formulaire quand un nouveau chanel est créé
+				$("#delete_chanel").css("display", "block");//Affichage du bouton de suppression
+				$("#chanel_form").css("display", "block");
 
 				clear_selected_if_exist();
 
 				selected_chanel = this;
 				$(this).css('background-color', '#787878');
-				$("#chanel_name_input").val($(this).children('.chanel_name').text());
+				$("#chanel_name_input").val($(this).children('.chanel_name').text());//Les données du chanel sont copiées dans le formulaire
 				$("#chanel_position_input").val($(this).children('.position').val());
 				$("#chanel_desc_textarea").val($(this).children('.chanel_description').val());
 				$("#chanel_owner_h3").text("Propriétaire : "+$(this).children('.owner_name').val());
 
 			});
 
+			//Click sur le bouton de création de chanel
 			$("#add_chanel").click(function(){
 				clear_selected_if_exist();
+				$("#delete_chanel").css("display", "none");
+				$("#chanel_form").css("display", "block");
+
 				document.getElementById("new_chanel_created").value = true;
 				document.getElementById("chanel_name_input").value = "Nouveau chanel";
 				$("#chanel_desc_textarea").val("");
@@ -91,16 +97,18 @@
 			});
 
 			//Events Socket.io
-			$("#chanel_modify_submit_button").click(function(){
-				socket.emit("manage_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, document.getElementById("new_chanel_created").value, (reponse) => {
-					console.log("Status de la requête : "+reponse.status);
+
+			//Supression de chanel
+			$("#delete_chanel").click(function(){
+				socket.emit("delete_chanel", $(selected_chanel).attr("id").split("_")[1], (reponse) => {
+					console.log("Status de la requête (suppression) : "+reponse.status);
 					switch(reponse.status){
 						case "OK":
 							//Rechargement de la liste des chanels
 							regen_chanel_list();
 							break;
 
-						case "erreur":
+						case "Erreur":
 							alert(reponse.info);
 							break;
 
@@ -108,6 +116,53 @@
 							break;
 					}
 				});
+			})
+
+			//Création/modification de chanel
+			$("#chanel_modify_submit_button").click(function(){
+
+				if(document.getElementById("new_chanel_created").value=="true"){
+
+					socket.emit("create_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, (reponse) => {
+						console.log("Status de la requête (création) : "+reponse.status);
+
+						switch(reponse.status){
+							case "OK":
+								//Rechargement de la liste des chanels
+								regen_chanel_list();
+								break;
+
+							case "Erreur":
+								alert(reponse.info);
+								break;
+
+							default:
+								break;
+						}
+					});
+
+				}else{
+
+					socket.emit("update_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, $(selected_chanel).attr("id").split("_")[1], (reponse) => {
+						console.log("Status de la requête (modification) : "+reponse.status);
+
+						switch(reponse.status){
+							case "OK":
+								//Rechargement de la liste des chanels
+								regen_chanel_list();
+								alert("Chanel modifié !");
+								break;
+
+							case "Erreur":
+								alert(reponse.info);
+								break;
+
+							default:
+								break;
+						}
+
+					});
+				}
 			});
 
 		</script>

@@ -55,22 +55,29 @@ app.use(sessionMiddleware);
 io.sockets.on('connection', function(socket){
   console.log("Un client s'est connecté !");
 
-  socket.on("manage_chanel", (name, description, position, new_chanel_created, callback) => {
-    socket_functions.manage_chanel(name, description, position, new_chanel_created, connection, socket, callback);//Nom du chanel, description, nouveau ou non, connexion Mysql, socket si besoin de renvoyer un message, retour
+  socket.on("create_chanel", (name, description, position, callback) => {
+    socket_functions.create_chanel(name, description, position, connection, socket, callback);//Nom du chanel, description, nouveau ou non, connexion Mysql, socket si besoin de renvoyer un message, retour
   });
 
   socket.on("get_chanel_list", (callback) => {
     socket_functions.get_chanel_list(connection, socket, callback);
   });
 
+  socket.on("delete_chanel", (chanel_id, callback) => {//Evénement "delete_chanel" reçu, avec l'argument chanel_id. Un callback est rajouté à la fonction pour répondre au client
+    socket_functions.delete_chanel(chanel_id, connection, socket, callback);//L'ID du chanel, la connection Mysql, le socket et le callback sont envoyés à une fonction qui gérera la suppression
+  });
+
+  socket.on("update_chanel", (name, description, position, chanel_id, callback) => {
+    socket_functions.update_chanel(name, description, position, chanel_id, connection, socket, callback);
+  });
 });
+
 
 
 app.use(function(req, res, next){
 //Fonction éxécutée à chaque chargement de page
     next();
 });
-
 
 
 
