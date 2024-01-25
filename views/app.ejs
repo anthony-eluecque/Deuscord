@@ -28,6 +28,7 @@
     </div>
 
     <div class="chanel_infos grey panel" id="chanel_infos">
+			<p id="chanel_desc"></p>
     </div>
 
     <div class="central_div" align="right" id="central_div">
@@ -46,7 +47,7 @@
     </div>
 
 		<div class="input_message" id="input_message">
-			<input type="text" class="stylized_input" minlength="1" maxlength="2000" id="message_text_input"></input>
+			<input type="text" class="stylized_input" minlength="1" maxlength="2000" id="message_text_input" style="display: none;"></input>
 		</div>
 
     <div class="online_list grey panel" id="online_list">
@@ -125,13 +126,16 @@
 			//Gestion du changement de chanel
 			$("#chanels_list").on('click', '.chanel', function(){
 				changer_de_chanel($(this).attr("id").split("_")[1]);
+				$("#chanel_desc").text($(this).children(".chanel_description").val());
+				$("#message_text_input").css("display", "block");//L'input du message est caché par défaut, et affiché quand un chanel est séléctionné
 			});
 
 
 			//Gestion de l'écriture d'un message
 			$("#message_text_input").keypress((key) => {
 				if( key.which == 13 ){
-					//send_message($("#message_text_input").val());
+					send_message($("#message_text_input").val());
+					$("#message_text_input").val("");
   			}
 			});
 

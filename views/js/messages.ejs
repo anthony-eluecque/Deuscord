@@ -33,8 +33,10 @@ function changer_de_chanel(chanel_id){
 
 function send_message(message){
   socket.emit("send_message", message, callback => {
+    console.log("Statut de la requête ( Envoi de message ) : "+callback.status);
+
     if(callback.status=="OK"){
-      //add_message();
+      add_message($("#username").text(), message, callback.message_id);
     }else if(callback.status=="Erreur"){
       alert(callback.info);
     }
