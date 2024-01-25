@@ -36,7 +36,7 @@ function send_message(message){
     console.log("Statut de la requête ( Envoi de message ) : "+callback.status);
 
     if(callback.status=="OK"){
-      add_message($("#username").text(), message, callback.message_id);
+      //add_message($("#username").text(), message, callback.message_id);
     }else if(callback.status=="Erreur"){
       alert(callback.info);
     }
