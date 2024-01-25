@@ -62,7 +62,7 @@ module.exports = {
   send_message: function(message, connection, socket, io, callback){
     if(message.length<=2000){//Message limité à 2000 caractères
 
-      connection.query("INSERT INTO message(sender, date, text, chanel) VALUES("+socket.request.session.user_id+", NOW(), "+mysql.escape(message)+", "+get_client_chanel(socket)+"); SELECT LAST_INSERT_ID() AS last_id;", function(error, results, fields){
+      connection.query("INSERT INTO message(sender, date, text, chanel) VALUES("+socket.request.session.user_id+", NOW(), "+mysql.escape(message)+", "+get_client_chanel(socket)+");", function(error, results, fields){
         if(error instanceof Error){
 
           console.log(error);
@@ -72,9 +72,10 @@ module.exports = {
           });
 
         }else{
+          console.log(results);
           callback({
             status: "OK",
-            message_id: results[1][0].last_id
+            message_id: results.insertId
           });
         }
       });

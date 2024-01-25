@@ -5,8 +5,7 @@ module.exports = {
       host: '127.0.0.1',
       user: 'root',
       password: '',
-      database: 'deuscord',
-      multipleStatements: true
+      database: 'deuscord'
     });
     return(connection);
   }
