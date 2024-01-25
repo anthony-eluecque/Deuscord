@@ -1,21 +1,46 @@
 <html>
+
 	<head>
 		<title>MODIFIER</title>
 		<link rel="stylesheet" type="text/css" href="/style">
     <link rel="stylesheet" type="text/css" href="/style/login">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 	</head>
+
 	<body>
-    <div id="central_div">
-      <h1>Connexion</h1>
-      <form method="post" action="/login/post">
-          <input type="text" name="login" placeholder="Login" required="required"/>
-          <input type="password" name="password" placeholder="Mot de passe" required="required"/>
-					<button type="submit">Connexion</button>
-				</form>
-				<p><a href="#">Mot de passe oublié ?</a></p>
-				<a href="/register" class="computer_only"><button class="button computer_only" align="right">Créer un compte</button></a>
-    </div>
-		<a href="/register" class="phone_only"><button class="button phone_only" align="right">Créer un compte</button></a>
+
+		<div id="central_div">
+			<div class="error_div" id="error_div">
+				<p align="center" id="error_p"></p>
+		</div>
+		
+    	<div id="central_div">
+    		<h1>Connexion</h1>
+    		<form method="post" action="/login/post">
+    			<input type="text" name="login" placeholder="Login" required="required"/>
+    			<input type="password" name="password" placeholder="Mot de passe" required="required"/>
+				<button type="submit">Connexion</button>
+			</form>
+			<p><a href="#">Mot de passe oublié ?</a></p>
+			<a href="/register" class="computer_only"><button class="button computer_only" align="right">Créer un compte</button></a>
+   		</div>
+			<a href="/register" class="phone_only"><button class="button phone_only" align="right">Créer un compte</button></a>
+
+		<script type="text/javascript">
+			//Erreurs d'enregistrement
+				var url = new URL(window.location.href);
+				var error = url.searchParams.get("error");//Récupération de la variable erreur dans le GET ( URL )
+				switch(error){
+					case "error_login":
+						document.getElementById("error_div").style.display="block";
+						document.getElementById("error_p").innerHTML="Une erreur est survenu !";
+					case "error_pwd":
+						document.getElementById("error_div").style.display="block";
+						document.getElementById("error_p").innerHTML="Mot de passe incorrect !";
+					default:
+						break;
+				}
+		</script>
 	</body>
+
 </html>

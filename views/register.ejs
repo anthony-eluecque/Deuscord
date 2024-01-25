@@ -1,16 +1,18 @@
 <html>
+
 	<head>
 		<title>MODIFIER</title>
 		<link rel="stylesheet" type="text/css" href="/style">
     <link rel="stylesheet" type="text/css" href="/style/login">
     <meta name="viewport" content="width=device-width,initial-scale=1">
 	</head>
+
 	<body>
 
-    <div id="central_div">
+    	<div id="central_div">
 			<div class="error_div" id="error_div">
 				<p align="center" id="error_p"></p>
-			</div>
+		</div>
 
       <h1>Inscription</h1>
       <form method="post" action="/register/post">
@@ -21,22 +23,27 @@
 					<button type="submit">Créer mon compte</button>
       </form>
     </div>
-		<script type="text/javascript">
 
+		<script type="text/javascript">
 		//Erreurs d'enregistrement
 			var url = new URL(window.location.href);
 			var error = url.searchParams.get("error");//Récupération de la variable erreur dans le GET ( URL )
-
 			switch(error){
 				case "forbiden_sign":
 					document.getElementById("error_div").style.display="block";
 					document.getElementById("error_p").innerHTML="Le pseudo ou le mail contiennent des caractères interdits !";
 					break;
-
+				case "existing_in_bdd":
+					document.getElementById("error_div").style.display="block";
+					document.getElementById("error_p").innerHTML="Le pseudo ou le mail n'est pas disponible !";
+				case "error_register":
+					document.getElementById("error_div").style.display="block";
+					document.getElementById("error_p").innerHTML="Une erreur est survenu !";
 				default:
 					break;
 			}
-
 		</script>
+    
 	</body>
+
 </html>
