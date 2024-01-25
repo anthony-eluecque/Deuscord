@@ -10,7 +10,7 @@
 
 
 //Fonctions, néccéssite JQuery
-var chanel_div = document.getElementsByClassName("chanel")[0];
+var chanel_div = document.getElementsByClassName("chanel")[0];//Div à copier
 
 function add_chanel_div(nom, id, description, owner, position, pseudo){
   var nouveau_chanel = document.getElementById("chanels_list").appendChild(chanel_div.cloneNode(true));//true -> true|false -> copier les éléments "enfants"

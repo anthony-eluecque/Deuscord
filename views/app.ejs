@@ -7,11 +7,11 @@
 	</head>
 	<body>
 
-    <div class="server_div grey" id="server_div">
+    <div class="server_div grey panel" id="server_div">
       <a href="#"><img src="/img/gear.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/gear-param%C3%A8tres-options-ic%C3%B4ne-1077550/ -->
     </div>
 
-    <div class="chanel_list grey" id="chanels_list">
+    <div class="chanel_list grey panel" id="chanels_list">
       <a href="/app/chanels_admin"><img src="/img/gear.png" id="chanel_settings_img" class="settings_img"></a>
 
 			<!-- Liste des chanels -->
@@ -27,33 +27,51 @@
 
     </div>
 
-    <div class="chanel_infos grey" id="chanel_infos">
+    <div class="chanel_infos grey panel" id="chanel_infos">
     </div>
 
-    <div class="central_div" align="right">
+    <div class="central_div" align="right" id="central_div">
+
+			<!-- Div copiée par le JS pour ajouter un message -->
+			<div class="message" style="display: none;">
+				<p class="message_sender_pseudo" align="left"></p>
+				<p class="message_text" align="left"></p>
+			</div>
+
+			<div class="message">
+				<p class="message_sender_pseudo" align="left">Système</p>
+				<p class="message_text" align="left">Bienvenue ! Cliquez sur un chanel pour commencer...</p>
+			</div>
+
     </div>
 
-    <div class="online_list grey" id="online_list">
+		<div class="input_message" id="input_message">
+			<input type="text" class="stylized_input" minlength="1" maxlength="2000" id="message_text_input"></input>
+		</div>
+
+    <div class="online_list grey panel" id="online_list">
     </div>
 
-    <div class="user_area grey" id="user_area">
+    <div class="user_area grey panel" id="user_area">
       <h3 id="username"><%= pseudo %></h3>
     </div>
 
-    <div class="extend_chanels_panel" id="extend_chanels_panel">
+    <div class="extend_chanels_panel panel" id="extend_chanels_panel">
       <img src="/img/animation_arrow.png" class="animation_arrow"><!-- https://pixabay.com/fr/illustrations/fl%C3%A8che-r%C3%A9pertoire-panneaux-2085195/ -->
     </div>
 
-    <div class="extend_online_panel" id="extend_online_panel">
+    <div class="extend_online_panel panel" id="extend_online_panel">
       <img src="/img/animation_arrow.png" class="animation_arrow">
     </div>
 
 		<script src="/socket.io/socket.io.js"></script><!--J'importe le script néccésaire au fonctionnement de socket.io -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="/js/chanels_list"></script><!-- Permet de gérer la liste des chanels, socket y est définit -->
+		<script src="/js/messages"></script><!-- Permet de gérer les messages -->
 		<script type="text/javascript">
 
 			create_chanel_list();//Affiche la liste des chanels depuis la BDD
+
 
 			const div_chanels_panel = document.querySelector('#extend_chanels_panel');//Carrés avec les flèches, un click dessus permet de lancer l'animation
 			const div_online_panel = document.querySelector('#extend_online_panel');
@@ -103,6 +121,21 @@
 				}
 
 			});
+
+			//Gestion du changement de chanel
+			$("#chanels_list").on('click', '.chanel', function(){
+				changer_de_chanel($(this).attr("id").split("_")[1]);
+			});
+
+
+			//Gestion de l'écriture d'un message
+			$("#message_text_input").keypress((key) => {
+				if( key.which == 13 ){
+					//send_message($("#message_text_input").val());
+  			}
+			});
+
+
 		</script>
 
 	</body>
