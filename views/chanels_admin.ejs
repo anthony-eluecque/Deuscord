@@ -100,16 +100,16 @@
 
 			//Supression de chanel
 			$("#delete_chanel").click(function(){
-				socket.emit("delete_chanel", $(selected_chanel).attr("id").split("_")[1], (reponse) => {
-					console.log("Status de la requête (suppression) : "+reponse.status);
-					switch(reponse.status){
+				socket.emit("delete_chanel", $(selected_chanel).attr("id").split("_")[1], (callback) => {
+					console.log("Status de la requête (suppression) : "+callback.status);
+					switch(callback.status){
 						case "OK":
 							//Rechargement de la liste des chanels
 							regen_chanel_list();
 							break;
 
 						case "Erreur":
-							alert(reponse.info);
+							alert(callback.info);
 							break;
 
 						default:
@@ -123,17 +123,17 @@
 
 				if(document.getElementById("new_chanel_created").value=="true"){
 
-					socket.emit("create_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, (reponse) => {
-						console.log("Status de la requête (création) : "+reponse.status);
+					socket.emit("create_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, (callback) => {
+						console.log("Status de la requête (création) : "+callback.status);
 
-						switch(reponse.status){
+						switch(callback.status){
 							case "OK":
 								//Rechargement de la liste des chanels
 								regen_chanel_list();
 								break;
 
 							case "Erreur":
-								alert(reponse.info);
+								alert(callback.info);
 								break;
 
 							default:
@@ -143,10 +143,10 @@
 
 				}else{
 
-					socket.emit("update_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, $(selected_chanel).attr("id").split("_")[1], (reponse) => {
-						console.log("Status de la requête (modification) : "+reponse.status);
+					socket.emit("update_chanel", document.getElementById("chanel_name_input").value, document.getElementById("chanel_desc_textarea").value, document.getElementById("chanel_position_input").value, $(selected_chanel).attr("id").split("_")[1], (callback) => {
+						console.log("Status de la requête (modification) : "+callback.status);
 
-						switch(reponse.status){
+						switch(callback.status){
 							case "OK":
 								//Rechargement de la liste des chanels
 								regen_chanel_list();
@@ -154,7 +154,7 @@
 								break;
 
 							case "Erreur":
-								alert(reponse.info);
+								alert(callback.info);
 								break;
 
 							default:

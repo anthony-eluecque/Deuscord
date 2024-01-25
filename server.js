@@ -1,7 +1,8 @@
 const authentification = require('./modules/authentification.js');//Fonctions gérant le login/register
 const mysql_connection = require('./modules/mysql_connection.js');//Crée une connexion Mysql, stocke aussi les infos de connexion
 const images = require('./modules/images.js');//Fonction gérant le /img/...
-const socket_functions = require('./modules/socket_functions.js');//Fonctions de socket.io
+const socket_chanels_functions = require('./modules/socket_chanels_functions.js');//Fonctions de socket.io permettant de créer, modifier ou supprimer un chanel
+const socket_messages_functions = require('./modules/socket_messages_functions.js');//Fonctions de socket.io permettant de changer de chanel et de gérer les messages
 
 const express = require('express');//Import d'Express, simplifie la gestion du backend
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
@@ -56,19 +57,27 @@ io.sockets.on('connection', function(socket){
   console.log("Un client s'est connecté !");
 
   socket.on("create_chanel", (name, description, position, callback) => {
-    socket_functions.create_chanel(name, description, position, connection, socket, callback);//Nom du chanel, description, nouveau ou non, connexion Mysql, socket si besoin de renvoyer un message, retour
+    socket_chanels_functions.create_chanel(name, description, position, connection, socket, callback);//Nom du chanel, description, nouveau ou non, connexion Mysql, socket si besoin de renvoyer un message, retour
   });
 
   socket.on("get_chanel_list", (callback) => {
-    socket_functions.get_chanel_list(connection, socket, callback);
+    socket_chanels_functions.get_chanel_list(connection, socket, callback);
   });
 
   socket.on("delete_chanel", (chanel_id, callback) => {//Evénement "delete_chanel" reçu, avec l'argument chanel_id. Un callback est rajouté à la fonction pour répondre au client
-    socket_functions.delete_chanel(chanel_id, connection, socket, callback);//L'ID du chanel, la connection Mysql, le socket et le callback sont envoyés à une fonction qui gérera la suppression
+    socket_chanels_functions.delete_chanel(chanel_id, connection, socket, callback);//L'ID du chanel, la connection Mysql, le socket et le callback sont envoyés à une fonction qui gérera la suppression
   });
 
   socket.on("update_chanel", (name, description, position, chanel_id, callback) => {
-    socket_functions.update_chanel(name, description, position, chanel_id, connection, socket, callback);
+    socket_chanels_functions.update_chanel(name, description, position, chanel_id, connection, socket, callback);
+  });
+
+  socket.on("change_chanel", (chanel_id, callback) => {
+    socket_messages_functions.change_chanel(chanel_id, connection, socket, io, callback);
+  });
+
+  socket.on("send_message", (message, callback) => {
+    socket_messages_functions.send_message(message, connection, socket, io, callback);
   });
 });
 
@@ -144,6 +153,9 @@ app.get('/js/cookies', function(req, res){
 });
 app.get('/js/chanels_list', function(req, res){
   res.render('./js/chanels_list.ejs');
+});
+app.get('/js/messages', function(req, res){
+  res.render('./js/messages.ejs');
 });
 
 //Obtention d'images

@@ -1,0 +1,42 @@
+//Fonctions gérant les messages, néccéssite JQuery
+
+var message_div = document.getElementsByClassName("message")[0];
+
+function add_message(pseudo, text, id){
+  var nouveau_message = document.getElementById("central_div").appendChild(message_div.cloneNode(true));//true -> true|false -> copier les éléments "enfants"
+  $(nouveau_message).css("display", "block");//La nouvelle div est affichée
+  nouveau_message.setAttribute("id", "message_"+id);//Un ID est donné au nouveau message
+  nouveau_message.children[0].innerHTML = pseudo;
+  nouveau_message.children[1].innerHTML = text;
+}
+
+function clear_messages(){
+    $("#central_div > .message").remove();
+}
+
+function changer_de_chanel(chanel_id){
+  socket.emit("change_chanel", chanel_id, callback => {
+    console.log("Statut de la requête ( Changement de chanel ) : "+callback.status);
+
+    if(callback.status=="OK"){
+
+      clear_messages();
+      for(var i=0; i<callback.result.length; i++){
+        add_message(callback.result[i].pseudo, callback.result[i].text, callback.result[i].id);
+      }
+
+    }else if(callback.status=="Erreur"){
+      alert(callback.info);
+    }
+  });
+}
+
+function send_message(message){
+  socket.emit("send_message", message, callback => {
+    if(callback.status=="OK"){
+      //add_message();
+    }else if(callback.status=="Erreur"){
+      alert(callback.info);
+    }
+  });
+}
