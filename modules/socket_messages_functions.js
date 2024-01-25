@@ -21,6 +21,10 @@ function get_client_chanel(socket){
   return(room);
 }
 
+function get_client_name(socket){
+  return(socket.request.session.pseudo);
+}
+
 module.exports = {
   change_chanel: function(chanel_id, connection, socket, io, callback){//Le client change de chanel
     //TODO :Vérifier les perms
@@ -77,6 +81,7 @@ module.exports = {
             status: "OK",
             message_id: results.insertId
           });
+          io.to(get_client_chanel(socket)).emit("recive_message", message, get_client_name(socket), results.insertId);
         }
       });
 

@@ -139,6 +139,9 @@
   			}
 			});
 
+			socket.on("recive_message", (pseudo, message, id) => {
+		    add_message(pseudo, message, id);
+		  });
 
 		</script>
 
