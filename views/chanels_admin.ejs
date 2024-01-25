@@ -11,7 +11,7 @@
 			<div class="div_left_pane">
 				<a href="/app"><img src="/img/close.png" id="close"></a><!-- https://pixabay.com/fr/vectors/proches-abandonn%C3%A9-x-ic%C3%B4ne-1540630/ -->
 				<h3 align="center">Gestion des chanels</h3>
-				<a href="#"><img src="/img/add.png" id="add_chanel"></a> <!-- https://pixabay.com/fr/vectors/plus-ajouter-croix-ajout-5840717/ -->
+				<img src="/img/add.png" id="add_chanel" class="pointer"> <!-- https://pixabay.com/fr/vectors/plus-ajouter-croix-ajout-5840717/ -->
 			</div>
 
 			<div class="chanels_div" id="chanels_list">
@@ -30,14 +30,14 @@
 
 			<div class="chanel_infos">
 				<h3 id="chanel_owner_h3"></h3>
-				<img src="/img/delete.png" id="delete_chanel" style="display: none;">
+				<img src="/img/delete.png" id="delete_chanel" style="display: none;" class="pointer">
 
 				<form method="post" action="javascript:void(0);" id="chanel_form" style="display: none;">
 	          <input type="text" name="name" placeholder="Nom du chanel" required="required" maxlength="24" id="chanel_name_input" class="stylized_input"></input>
 						<input type="number" name="position" placeholder="Position du chanel" min="0" max="9999" id="chanel_position_input" class="stylized_input"></input>
 						<textarea name="desc" maxlength="512" form="chanel_form" id="chanel_desc_textarea">Description du chanel</textarea>
 						<div id="chanel_modify_submit_button_div">
-							<button type="submit" id="chanel_modify_submit_button">Valider</button>
+							<button type="submit" id="chanel_modify_submit_button" class="pointer">Valider</button>
 						</div>
 
 						<input type="hidden" name="new_chanel_created" id="new_chanel_created" value="true"><!-- Permet de dire au serveur si l'on crée un nouveau chanel, ou s'il s'agit d'une mise à jour -->
