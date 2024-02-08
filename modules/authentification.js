@@ -19,10 +19,6 @@ module.exports = {
             //Déjà en BDD
             return;
           }else{
-            req.session.pseudo = results[0].pseudo;
-            req.session.user_id = results[0].id;
-            req.session.save();
-            res.redirect('/app');
             //Tout va bien, je continue
 
             bcrypt.hash(req.body.password, 12, function(err, hash) {//String, nombre de hashs, quoi faire ensuite
