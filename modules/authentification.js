@@ -63,7 +63,7 @@ module.exports = {
       connection.query('SELECT id, pseudo, email, password FROM user WHERE pseudo='+mysql.escape(login)+' OR email='+mysql.escape(login)+';', function (error, results, fields) {//Error : Renvoit l'erreur s'il y en a une; result: Contient une liste de dictionnaires contenant les objets, fields : Données sur les tables ( useless )
         if (error instanceof Error){
           console.log(error);//En cas d'erreur, l'erreur est log
-          res.redirect('/register?error=error_login');
+          res.redirect('/login?error=error_login');
           //Erreur dans le login / Non trouvé
           //Annuler la connexion
         }else{
@@ -80,19 +80,19 @@ module.exports = {
               }else{
                 //Erreur de MDP
                 console.log(error);
-                res.redirect('/register?error=error_credentials');
+                res.redirect('/login?error=error_credentials');
               }
             });
           }else{
             console.log(error);
-            res.redirect('/register?error=error_login');
+            res.redirect('/login?error=error_login');
             //Trop de résultats, erreur
           }
         }
       });
     }else{
       console.log(error);
-      res.redirect('/register?error=error_login');
+      res.redirect('/login?error=error_login');
       //Login non conforme
     }
   }
