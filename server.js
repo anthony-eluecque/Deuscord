@@ -3,6 +3,7 @@ const mysql_connection = require('./modules/mysql_connection.js');//Crée une co
 const images = require('./modules/images.js');//Fonction gérant le /img/...
 const socket_chanels_functions = require('./modules/socket_chanels_functions.js');//Fonctions de socket.io permettant de créer, modifier ou supprimer un chanel
 const socket_messages_functions = require('./modules/socket_messages_functions.js');//Fonctions de socket.io permettant de changer de chanel et de gérer les messages
+const create_database = require('./modules/create_database.js');//Créer la BDD au premier lancement
 
 const express = require('express');//Import d'Express, simplifie la gestion du backend
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
@@ -40,6 +41,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 try{
   connection.connect();//Connexion à la BDD
+  create_database(connection);//Créer les tables de la BDD au premier lancement
+  console.log("Connection à la BDD et requêtes de lancement réussies !");
 }catch(error){
   console.log("Impossible d'accéder à la BDD !!");
   console.log(error);
