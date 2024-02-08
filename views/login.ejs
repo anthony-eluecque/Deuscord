@@ -13,7 +13,7 @@
 			<div class="error_div" id="error_div">
 				<p align="center" id="error_p"></p>
 		</div>
-		
+
     	<div id="central_div">
     		<h1>Connexion</h1>
     		<form method="post" action="/login/post">
@@ -33,10 +33,12 @@
 				switch(error){
 					case "error_login":
 						document.getElementById("error_div").style.display="block";
-						document.getElementById("error_p").innerHTML="Une erreur est survenu !";
-					case "error_pwd":
+						document.getElementById("error_p").innerHTML="Une erreur est survenue !";
+						break;
+					case "error_credentials":
 						document.getElementById("error_div").style.display="block";
-						document.getElementById("error_p").innerHTML="Mot de passe incorrect !";
+						document.getElementById("error_p").innerHTML="Identifiant ou mod de passe incorrect !";
+						break;
 					default:
 						break;
 				}

@@ -80,7 +80,7 @@ module.exports = {
               }else{
                 //Erreur de MDP
                 console.log(error);
-                res.redirect('/register?error=error_pwd');
+                res.redirect('/register?error=error_credentials');
               }
             });
           }else{
