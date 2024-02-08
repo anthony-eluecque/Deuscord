@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: "mysql:latest"
+    environment:
+      MYSQL_ROOT_PASSWORD: "pass"
+      MYSQL_DATABASE: "deuscord"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "pass"
+    ports:
+      - "3306:3306"
+
+  deuscord:
+    build: # Construire l'image à partir du dossier actif
+      context: ./
+    ports:
+      - "80:80"
+    depends_on:
+      - redis
+      - mysql
+    restart: always

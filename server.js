@@ -8,7 +8,7 @@ const express = require('express');//Import d'Express, simplifie la gestion du b
 const morgan = require('morgan');//Import de morgan, permet de log les connexions au serveur
 const ejs = require('ejs');//Import d'ejs : permet de rendre les .ejs, les <% %>
 const bodyParser = require('body-parser');// Import de body-parser : permet de récupérer les infos des formulaires sur le site
-const mysql = require('mysql');//Import de MySql, permettra de faire des requêtes vers la BDD
+const mysql = require('mysql2');//Import de MySql, permettra de faire des requêtes vers la BDD
 const bcrypt = require('bcrypt');//Import de bcrypt, permet de chiffrer les MDP
 const redis = require("redis");//Redis
 const session = require('express-session');//Gestion des sessions avec Express
@@ -21,7 +21,7 @@ var server = require("http").createServer(app);//Crée le serveur
 var connection = mysql_connection.getConnexion();//Création d'une connexion
 
 //redis
-var redisClient  = redis.createClient();
+var redisClient  = redis.createClient({ url: "redis://@redis:6379" });
 
 redisClient.on('error', (err) => {
   console.log('Redis error : ', err);
@@ -30,7 +30,7 @@ redisClient.on('error', (err) => {
 var sessionMiddleware = session({//Définition des paramètres du système de session
   secret: 'SECRET_A_CHANGER',
   //J'indique à express-session de stocker les sessions en cours dans Redis
-  store: new redisStore({ host: '127.0.0.1', port: 6379, client: redisClient, ttl:  86000}),
+  store: new redisStore({ host: 'redis', port: 6379, client: redisClient, ttl:  86000}),
   saveUninitialized: true,
   resave: true
 });
@@ -166,4 +166,4 @@ app.get('/img/:img', function(req, res){
 });
 
 console.log("Serveur démarré !");
-server.listen(8080, '0.0.0.0');//Le serveur démarre sur le port 8080 ( HTTP par défaut en 80, HTTPS en 443), et écoute les connexions de toutes les IPs
+server.listen(80, '0.0.0.0');//Le serveur démarre sur le port 8080 ( HTTP par défaut en 80, HTTPS en 443), et écoute les connexions de toutes les IPs

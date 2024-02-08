@@ -1,4 +1,4 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const mysql_connection = require('./mysql_connection.js');
 
 function clear_client_rooms(socket){

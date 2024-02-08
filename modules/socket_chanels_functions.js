@@ -1,4 +1,4 @@
-const mysql = require('mysql');//Import de MySql, permettra de faire des requêtes vers la BDD
+const mysql = require('mysql2');//Import de MySql, permettra de faire des requêtes vers la BDD
 const mysql_connection = require('./mysql_connection.js');
 
 module.exports = {
