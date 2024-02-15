@@ -65,7 +65,6 @@ module.exports = {
   },
   send_message: function(message, connection, socket, io, callback){
     if(message.length<=2000){//Message limité à 2000 caractères
-
       connection.query("INSERT INTO message(sender, date, text, chanel) VALUES("+socket.request.session.user_id+", NOW(), "+mysql.escape(message)+", "+get_client_chanel(socket)+");", function(error, results, fields){
         if(error instanceof Error){
 
@@ -90,5 +89,20 @@ module.exports = {
         info: "Message trop long ! Max : 2000 caractères"
       });
     }
-  }
+  },
+  delete_message: function(message_id, callback, connection) {
+    connection.query("DELETE FROM message WHERE id = ?", [message_id], function(error, results, fields) {
+      if (error instanceof Error) {
+          console.log(error);
+          callback({
+              status: "Erreur",
+              info: "Erreur lors de la suppression du message de la base de données"
+          });
+      } else {
+          callback({
+              status: "OK",
+              info: "Message supprimé avec succès de la base de données"
+          });
+      }
+  });  }
 }

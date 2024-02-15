@@ -8,6 +8,32 @@ function add_message(pseudo, text, id){
   nouveau_message.setAttribute("id", "message_"+id);//Un ID est donné au nouveau message
   nouveau_message.children[0].innerHTML = pseudo;
   nouveau_message.children[1].innerHTML = text;
+
+
+  // Ajout d'un bouton
+  var button = document.createElement("button");
+  button.innerHTML = "Supprimer";
+  button.setAttribute("class", "delete-button");
+  button.addEventListener("click", function() {
+    // Fonction pour supprimer le message lorsque le bouton est cliqué
+    nouveau_message.remove();
+    var messageId = nouveau_message.getAttribute("id").split("_")[1]; // Récupérer l'ID du message
+    console.log("ID du message à supprimer : " + messageId);
+    socket.emit("delete_message", messageId, callback => {
+      console.log("Statut de la requête ( Suppression de message ) : "+callback.status);
+  
+      if(callback.status=="OK"){
+          console.log("message bien supprimé")
+      }else if(callback.status=="Erreur"){
+        alert(callback.info);
+      }
+     // Envoyer l'ID du message via le socket
+    }
+    
+    )});
+
+  // Ajout du bouton à la fin de la div du message
+  nouveau_message.appendChild(button);
 }
 
 function clear_messages(){
