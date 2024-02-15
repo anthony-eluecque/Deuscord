@@ -21,6 +21,8 @@ services:
       context: ./
     ports:
       - "80:80"
+    environment:
+      title: 'Deuscord'
     depends_on:
       - redis
       - mysql
