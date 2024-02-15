@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>MODIFIER</title>
+		<title><%= process.env.title %></title>
 		<link rel="stylesheet" type="text/css" href="/style">
     <link rel="stylesheet" type="text/css" href="/style/app">
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -55,6 +55,9 @@
 
     <div class="user_area grey panel" id="user_area">
       <h3 id="username"><%= pseudo %></h3>
+	  <form method="get" action="/logout">
+		<button type="submit">Se Déconnecter</button>
+	  </form>
     </div>
 
     <div class="extend_chanels_panel panel" id="extend_chanels_panel">

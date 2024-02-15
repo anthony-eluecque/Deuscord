@@ -83,6 +83,10 @@ io.sockets.on('connection', function(socket){
     socket_messages_functions.send_message(message, connection, socket, io, callback);
   });
 
+  socket.on("delete_message", (message_id, callback) => {
+    socket_messages_functions.delete_message(message_id, callback, connection);
+  });
+
 
 });
 
@@ -100,7 +104,8 @@ app.get('/', function(req, res){
 });
 
 app.get('/login', function(req, res){
-  res.render('login.ejs');
+  if (req.session.pseudo!=undefined) res.redirect('/app');
+  else res.render('login.ejs');
 });
 app.post('/login/post', function(req, res){
   authentification.login(req, res, connection);//Exécution de la fonction login définie dans le module authentification
@@ -112,7 +117,8 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/register', function(req, res){
-  res.render('register.ejs');
+  if (req.session.pseudo!=undefined) res.redirect('/app');
+  else res.render('register.ejs');
 });
 app.post('/register/post', function(req, res){
   authentification.register(req, res, connection);
