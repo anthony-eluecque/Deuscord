@@ -1,152 +1,108 @@
-<html>
-	<head>
-		<title>MODIFIER</title>
-		<link rel="stylesheet" type="text/css" href="/style">
-    <link rel="stylesheet" type="text/css" href="/style/app">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-	</head>
-	<body>
+const mysql = require('mysql2');
+const mysql_connection = require('./mysql_connection.js');
 
-    <div class="server_div grey panel" id="server_div">
-      <a href="#"><img src="/img/gear.png" id="server_settings_img" class="settings_img"></a><!-- https://pixabay.com/fr/vectors/gear-param%C3%A8tres-options-ic%C3%B4ne-1077550/ -->
-    </div>
+function clear_client_rooms(socket){
+  socket.rooms.forEach(function(room_name){//Pour chaque room du socket du client :
+    if(room_name!=socket.id){//Si le nom de la room n'est pas son id ( room créée par défaut ayant pour nom l'ID du socket )
+      socket.leave(room_name);//Quitter la room
+    }
+  });
+}
 
-    <div class="chanel_list grey panel" id="chanels_list">
-      <a href="/app/chanels_admin"><img src="/img/gear.png" id="chanel_settings_img" class="settings_img"></a>
+function get_client_chanel(socket){
+  var i = 0;
+  var room;
+  socket.rooms.forEach(function(room_name){
+    i++;
+    if(i==2){
+      room=room_name;
+    }
+  });
+  return(room);
+}
 
-			<!-- Liste des chanels -->
-			<!-- Div copiée par le JS pour ajouter un serveur -->
-			<div class="chanel" style="display: none;">
-				<h5 class="chanel_name">Channel name</h5>
-				<img src="/img/keyboard.png" class="text_chanel_image">
-				<input type="hidden" value="" class="chanel_description"></input><!-- Les trois inputs cachés stockent la description, le créateur du chanel et la position du chanel dans la liste -->
-				<input type="hidden" value="" class="owner_id"></input>
-				<input type="hidden" value="" class="owner_name"></input>
-				<input type="hidden" value="" class="position"></input>
-			</div>
+function get_client_name(socket){
+  return(socket.request.session.pseudo);
+}
 
-    </div>
+module.exports = {
+  change_chanel: function(chanel_id, connection, socket, io, callback){//Le client change de chanel
+    //TODO :Vérifier les perms
+    if(/^([0-9]{1,999999})$/.test(chanel_id)){//L'ID est un nombre
 
-    <div class="chanel_infos grey panel" id="chanel_infos">
-			<p id="chanel_desc"></p>
-    </div>
+      clear_client_rooms(socket);//Clear de toutes les rooms du client
+      socket.join(chanel_id);//Le client n'a plus aucune room à part celle par défaut, il peut rejoindre un nouveau chanel
+      //Le socket est maintenant dans la bonne room, mais il faut aussi lui envoyer les derniers messages envoyés dans la room
+      connection.query('SELECT pseudo, date, message.text, message.id FROM message INNER JOIN user ON message.sender=user.id WHERE chanel='+mysql.escape(chanel_id)+' ORDER BY date LIMIT 50;', function(error, results, fields){
+        if(error instanceof Error){
 
-    <div class="central_div" align="right" id="central_div">
+          console.log(error);
+          callback({
+            status: "Erreur",
+            info: "Erreur BDD",
+            result: []
+          });
 
-			<!-- Div copiée par le JS pour ajouter un message -->
-			<div class="message" style="display: none;">
-				<p class="message_sender_pseudo" align="left"></p>
-				<p class="message_text" align="left"></p>
-			</div>
+        }else{
+          var liste_messages = [];
+          for(var i=0; i<Object.keys(results).length; i++){//Les messages sont récupérés
+            liste_messages.push(results[i]);
+          }
+          callback({//Puis renvoyés au serveur
+            status: "OK",
+            result: liste_messages
+          });
 
-			<div class="message">
-				<p class="message_sender_pseudo" align="left">Système</p>
-				<p class="message_text" align="left">Bienvenue ! Cliquez sur un chanel pour commencer...</p>
-			</div>
+        }
+      });
 
-    </div>
+    }else{
+      callback({
+        status: "Erreur",
+        info: "ID invalide"
+      });
+    }
+  },
+  send_message: function(message, connection, socket, io, callback){
+    if(message.length<=2000){//Message limité à 2000 caractères
+      connection.query("INSERT INTO message(sender, date, text, chanel) VALUES("+socket.request.session.user_id+", NOW(), "+mysql.escape(message)+", "+get_client_chanel(socket)+");", function(error, results, fields){
+        if(error instanceof Error){
 
-		<div class="input_message" id="input_message">
-			<input type="text" class="stylized_input" minlength="1" maxlength="2000" id="message_text_input" style="display: none;"></input>
-		</div>
+          console.log(error);
+          callback({
+            status: "Erreur",
+            info: "Erreur BDD"
+          });
 
-    <div class="online_list grey panel" id="online_list">
-    </div>
+        }else{
+          callback({
+            status: "OK",
+            message_id: results.insertId
+          });
+          io.to(get_client_chanel(socket)).emit("recive_message", get_client_name(socket), message, results.insertId);
+        }
+      });
 
-    <div class="user_area grey panel" id="user_area">
-      <h3 id="username"><%= pseudo %></h3>
-	  <form method="get" action="/logout">
-		<button type="submit">Se Déconnecter</button>
-	  </form>
-    </div>
-
-    <div class="extend_chanels_panel panel" id="extend_chanels_panel">
-      <img src="/img/animation_arrow.png" class="animation_arrow"><!-- https://pixabay.com/fr/illustrations/fl%C3%A8che-r%C3%A9pertoire-panneaux-2085195/ -->
-    </div>
-
-    <div class="extend_online_panel panel" id="extend_online_panel">
-      <img src="/img/animation_arrow.png" class="animation_arrow">
-    </div>
-
-		<script src="/socket.io/socket.io.js"></script><!--J'importe le script néccésaire au fonctionnement de socket.io -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="/js/chanels_list"></script><!-- Permet de gérer la liste des chanels, socket y est définit -->
-		<script src="/js/messages"></script><!-- Permet de gérer les messages -->
-		<script type="text/javascript">
-
-			create_chanel_list();//Affiche la liste des chanels depuis la BDD
-
-
-			const div_chanels_panel = document.querySelector('#extend_chanels_panel');//Carrés avec les flèches, un click dessus permet de lancer l'animation
-			const div_online_panel = document.querySelector('#extend_online_panel');
-
-			var chanels_extended = false;
-			var online_extended = false;
-
-			div_chanels_panel.addEventListener('click', event => {
-
-				if(online_extended){//Si le panel de droite est ouvert, je le referme
-					$('#online_list').animate({"left":"100%"}, 2000);
-					$('#extend_online_panel').animate({"left":"90%", "right":"0%"}, 2000);
-					online_extended = false;
-				}
-
-				if(chanels_extended){//Fermeture du panel de gauche
-					$('#server_div, #chanels_list, #user_area').animate({"right":"100%"}, 2000);
-					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
-					$('#chanel_infos').animate({"bottom":"90%"}, 2000);
-					chanels_extended = false;
-				}else{//Ouverture du panel de gauche
-					$('#server_div, #chanels_list, #user_area').animate({"right":"20%"}, 2000);
-					$('#extend_chanels_panel').animate({"right":"10%", "left":"80%"}, 2000);
-					$('#chanel_infos').animate({"bottom":"100%"}, 2000);
-					chanels_extended = true;
-				}
-			});
-
-			div_online_panel.addEventListener('click', event => {
-
-  			if(chanels_extended){//Si le panel de gauche est ouvert, je le referme
-					$('#server_div, #chanels_list, #user_area').animate({"right":"100%"}, 2000);//animate(Dico des propriétés CSS à changer, durée en ms)
-					$('#extend_chanels_panel').animate({"right":"90%", "left":"0%"}, 2000);
-					chanels_extended = false;
-				}
-
-				if(online_extended){//Fermeture du panel de droite
-					$('#online_list').animate({"left":"100%"}, 2000);
-					$('#extend_online_panel').animate({"left":"90%", "right":"0%"}, 2000);
-					$('#chanel_infos').animate({"bottom":"90%"}, 2000);
-					online_extended = false;
-				}else{//Ouverture du panel de droite
-					$('#online_list').animate({"left":"20%"}, 2000);
-					$('#extend_online_panel').animate({"left":"10%", "right":"80%"}, 2000);
-					$('#chanel_infos').animate({"bottom":"100%"}, 2000);
-					online_extended = true;
-				}
-
-			});
-
-			//Gestion du changement de chanel
-			$("#chanels_list").on('click', '.chanel', function(){
-				changer_de_chanel($(this).attr("id").split("_")[1]);
-				$("#chanel_desc").text($(this).children(".chanel_description").val());
-				$("#message_text_input").css("display", "block");//L'input du message est caché par défaut, et affiché quand un chanel est séléctionné
-			});
-
-
-			//Gestion de l'écriture d'un message
-			$("#message_text_input").keypress((key) => {
-				if( key.which == 13 ){
-					send_message($("#message_text_input").val());
-					$("#message_text_input").val("");
-  			}
-			});
-
-			socket.on("recive_message", (pseudo, message, id) => {
-		    add_message(pseudo, message, id);
-		  });
-
-		</script>
-
-	</body>
-</html>
+    }else{
+      callback({
+        status: "Erreur",
+        info: "Message trop long ! Max : 2000 caractères"
+      });
+    }
+  },
+  delete_message: function(message_id, callback, connection) {
+    connection.query("DELETE FROM message WHERE id = ?", [message_id], function(error, results, fields) {
+      if (error instanceof Error) {
+          console.log(error);
+          callback({
+              status: "Erreur",
+              info: "Erreur lors de la suppression du message de la base de données"
+          });
+      } else {
+          callback({
+              status: "OK",
+              info: "Message supprimé avec succès de la base de données"
+          });
+      }
+  });  }
+}

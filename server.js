@@ -83,6 +83,10 @@ io.sockets.on('connection', function(socket){
     socket_messages_functions.send_message(message, connection, socket, io, callback);
   });
 
+  socket.on("delete_message", (message_id, callback) => {
+    socket_messages_functions.delete_message(message_id, callback, connection);
+  });
+
 
 });
 
